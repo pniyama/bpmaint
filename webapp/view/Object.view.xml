@@ -159,16 +159,8 @@
 
                             <form:fields>
 
-                                <!--Input id="txtCountry" value="{Country}" editable="{objectView>/edit}" showValueHelp="true" suggestionItems="{/CountrySet}">
-
-                                    <suggestionItems>
-
-                                        <core:Item text="{Land}" />
-
-                                    </suggestionItems>
-
-                                </Input-->
-                        <Input id="txtCountry" value="{Country}" editable="{objectView>/edit}"/>
+                              <Input id="txtCountry" value="{Country}" description="{CountryDetail/Landx50}" editable="{objectView>/edit}" showValueHelp="true" valueHelpRequest="openCountryDialog"/>
+                        <!--Input id="txtCountry" value="{Country}" editable="{objectView>/edit}"/-->
                             </form:fields>
 
                         </form:FormElement>
