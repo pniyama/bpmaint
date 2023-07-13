@@ -3,8 +3,11 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/routing/History",
     "../model/formatter",
-    "sap/m/MessageBox"
-], function (BaseController, JSONModel, History, formatter, MessageBox) {
+    "sap/m/MessageBox",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
+
+], function (BaseController, JSONModel, History, formatter, MessageBox, Filter, FilterOperator) {
     "use strict";
 
     return BaseController.extend("bpmaint.controller.Object", {
@@ -93,11 +96,38 @@ sap.ui.define([
                 }
             });
         },
+
         error: (e) => {
             MessageBox.error(that.getText("msgBPUpdError"), {
                 title: that.getText("txtBPUpdError")
             });
-        }
+        },
+        openCountryDialog: function (oEvent) {
+            if (!this._oCountryDialog) {
+            this._oCountryDialog = 
+            sap.ui.xmlfragment("bpmaint.fragments.CountryDialog", this);
+            this.getView().addDependent(this._oCountryDialog);
+            }
+            this._oCountryDialog.open();
+            },
+            onSearchCountryDialog: function (oEvent) {
+            var sValue = oEvent.getParameter("value");
+            var oFilter = new Filter("Landx50", FilterOperator.Contains, sValue);
+            var oBinding = oEvent.getSource().getBinding("items");
+            oBinding.filter([oFilter]);
+            },
+            onCloseCountryDialog: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem"),
+            oInput = this.byId("inputCountry");
+            if (oSelectedItem) {
+            oInput.setValue(oSelectedItem.getTitle());
+            oInput.setDescription(oSelectedItem.getDescription());
+            } else {
+            oInput.resetProperty("value");
+            oInput.resetProperty("description");
+            }
+            }
+
     });
 
         },
