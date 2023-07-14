@@ -168,6 +168,32 @@ sap.ui.define([
             var oTable = this.byId("table");
             oTable.getBinding("items").refresh();
         },
+        onCloseCountryDialog: function (oEvent) {
+
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+
+            let oViewModel = this.getModel("worklistView");
+
+            let oNew = oViewModel.getProperty("/New");
+
+            if (oSelectedItem) {
+
+                oNew.Country = oSelectedItem.getTitle();
+
+                oViewModel.setProperty("/New", oNew);
+
+            } else {
+
+                oInput.resetProperty("value"); oInput.resetProperty("description");
+
+            }
+
+            // Limpa o filtro
+
+            this._oCountryDialog.getBinding("items").filter("");
+
+        },
+
 
         /* =========================================================== */
         /* internal methods                                            */

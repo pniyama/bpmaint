@@ -70,7 +70,7 @@
                         </form:FormElement>
                         <form:FormElement label="{i18n>txtCountry}">
                             <form:fields> 
-                                <Input id="txtCountry" value="{worklistView>/New/Country}" />
+                                <Input id="txtCountry" value="{worklistView>/New/Country}" showValueHelp="true" valueHelpRequest="openCountryDialog"/>
                             </form:fields>
                         </form:FormElement>
                     </form:FormContainer>

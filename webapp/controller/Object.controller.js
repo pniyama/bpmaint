@@ -64,6 +64,7 @@ sap.ui.define([
         onCancelPress: function () {
             //this._changeEditStatus();
             this._onNavBack(undefined);
+            this.limpaCampos();
         },
 
         onSavePress: function(){
@@ -102,32 +103,30 @@ sap.ui.define([
                 title: that.getText("txtBPUpdError")
             });
         },
-        openCountryDialog: function (oEvent) {
-            if (!this._oCountryDialog) {
-            this._oCountryDialog = 
-            sap.ui.xmlfragment("bpmaint.fragments.CountryDialog", this);
-            this.getView().addDependent(this._oCountryDialog);
-            }
-            this._oCountryDialog.open();
-            },
-            onSearchCountryDialog: function (oEvent) {
-            var sValue = oEvent.getParameter("value");
-            var oFilter = new Filter("Landx50", FilterOperator.Contains, sValue);
-            var oBinding = oEvent.getSource().getBinding("items");
-            oBinding.filter([oFilter]);
-            },
+        
             onCloseCountryDialog: function (oEvent) {
             var oSelectedItem = oEvent.getParameter("selectedItem"),
             oInput = this.byId("inputCountry");
             if (oSelectedItem) {
-            oInput.setValue(oSelectedItem.getTitle());
-            oInput.setDescription(oSelectedItem.getDescription());
+
+                oNew.Country = oSelectedItem.getTitle();
+
+                oViewModel.setProperty("/New", oNew);
+
             } else {
-            oInput.resetProperty("value");
-            oInput.resetProperty("description");
-            }
+
+                oInput.resetProperty("value"); oInput.resetProperty("description");
+
             }
 
+
+
+
+            // Limpa o filtro
+
+            this._oCountryDialog.getBinding("items").filter("");
+
+        }
     });
 
         },
@@ -186,6 +185,7 @@ sap.ui.define([
                 sObjectName = oObject.BusinessPartnerSet;
 
                 oViewModel.setProperty("/busy", false);
+                oViewModel.setProperty("/edit", false);
                 oViewModel.setProperty("/shareSendEmailSubject",
                     oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
                 oViewModel.setProperty("/shareSendEmailMessage",
@@ -201,6 +201,7 @@ sap.ui.define([
                 text: this.getResourceBundle().getText("txtOrganization")
 
             }));
+            
             cbTipo.addItem(new sap.ui.core.Item({
 
                 key: 2,
@@ -214,6 +215,35 @@ sap.ui.define([
             let bEdit = oViewModel.getProperty("/edit");
 
             oViewModel.setProperty("/edit", !bEdit);
+        },
+
+        limpaCampos: function(){
+
+            this.byId("txtPartnerName1").setValue("");
+
+            this.byId("txtPartnerName2").setValue("");
+
+            this.byId("txtSearchTerm1").setValue("");
+
+            this.byId("txtSearchTerm2").setValue("");
+
+            this.byId("txtStreet").setValue("");
+
+            this.byId("txtHouseNumber").setValue("");
+
+            this.byId("txtDistrict").setValue("");
+
+            this.byId("txtCity").setValue("");
+
+            this.byId("txtRegion").setValue("");
+
+            this.byId("txtZipCode").setValue("");
+
+            this.byId("txtCountry").setValue("");
+
+            let oViewModel = this.getModel("objectView");
+
+            oViewModel.setProperty("/edit", false);
         }
     });
 

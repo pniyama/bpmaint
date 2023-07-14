@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/UIComponent",
     "sap/m/library",
-    "sap/ui/core/routing/History"
-], function (Controller, UIComponent, mobileLibrary, History) {
+    "sap/ui/core/routing/History",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
+], function (Controller, UIComponent, mobileLibrary, History, Filter, FilterOperator) {
     "use strict";
 
     // shortcut for sap.m.URLHelper
@@ -89,6 +91,20 @@ sap.ui.define([
                 
             }
         },
+        openCountryDialog: function (oEvent) {
+            if (!this._oCountryDialog) {
+            this._oCountryDialog = 
+            sap.ui.xmlfragment("bpmaint.bpmaint.fragments.CountryDialog", this);
+            this.getView().addDependent(this._oCountryDialog);
+            }
+            this._oCountryDialog.open();
+            },
+            onSearchCountryDialog: function (oEvent) {
+            var sValue = oEvent.getParameter("value");
+            var oFilter = new Filter("Landx50", FilterOperator.Contains, sValue);
+            var oBinding = oEvent.getSource().getBinding("items");
+            oBinding.filter([oFilter]);
+            }
     });
 
 });
